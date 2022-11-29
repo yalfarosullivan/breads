@@ -19,6 +19,16 @@ breads.get('/new', (req, res) => {
   res.render('new')
 })
 
+//http://localhost:3003/breads/123
+//http://localhost:3003/breads/123/edit
+
+//GET {/breads/, /breads/new, /breads/:arrayIndex, /breads/:arrayIndex/edit}
+//PUT [route]
+//DELETE[route]
+
+//request -> controller
+//express will match the url based on the registered routes
+//http://localhost:3003/breads
 
 // SHOW
 breads.get('/:arrayIndex', (req, res) => {
@@ -32,6 +42,15 @@ breads.get('/:arrayIndex', (req, res) => {
   }
 })
 
+// EDIT
+breads.get('/:indexArray/edit', (req, res) => {
+  res.render('edit', {
+    bread: Bread[req.params.indexArray],
+    index: req.params.indexArray
+  })
+})
+
+
 // CREATE
 breads.post('/', (req, res) => {
   if (!req.body.image) {
@@ -44,6 +63,18 @@ breads.post('/', (req, res) => {
   }
   Bread.push(req.body)
   res.redirect('/breads')
+})
+
+
+// UPDATE
+breads.put('/:arrayIndex', (req, res) => {
+  if(req.body.hasGluten === 'on'){
+    req.body.hasGluten = true
+  } else {
+    req.body.hasGluten = false
+  }
+  Bread[req.params.arrayIndex] = req.body
+  res.redirect(`/breads/${req.params.arrayIndex}`)
 })
 
 
